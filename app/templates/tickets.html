@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Tickets</h2>
+
+<div class="card">
+  <h3>Add Ticket</h3>
+  <form method="post" action="/tickets/add">
+    <div>
+      <label>Booking</label><br>
+      <select name="booking_id">
+        {% for b in bookings %}
+          <option value="{{ b.booking_id }}">{{ b.booking_ref }} (id={{ b.booking_id }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div><label>Passenger Name*</label><br><input name="passenger_name"></div>
+    <div><label>Passport No</label><br><input name="passport_no"></div>
+    <div><label>Seat No*</label><br><input name="seat_no" placeholder="12A"></div>
+    <div><label>Ticket Price</label><br><input name="ticket_price" value="100"></div>
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+<table>
+  <tr>
+    <th>ID</th><th>Booking</th><th>Passenger</th><th>Seat</th><th>Price</th><th>Actions</th>
+  </tr>
+  {% for t in tickets %}
+  <tr>
+    <td>{{ t.ticket_id }}</td>
+    <td>{{ t.booking_ref }}</td>
+    <td>{{ t.passenger_name }}</td>
+    <td>{{ t.seat_no }}</td>
+    <td>{{ t.ticket_price }}</td>
+    <td>
+      <form class="inline" method="post" action="/tickets/update">
+        <input type="hidden" name="ticket_id" value="{{ t.ticket_id }}">
+        <input name="seat_no" value="{{ t.seat_no }}" style="width:60px;">
+        <input name="ticket_price" value="{{ t.ticket_price }}" style="width:70px;">
+        <button type="submit">Update</button>
+      </form>
+
+      <form class="inline" method="post" action="/tickets/delete" onsubmit="return confirm('Delete ticket?');">
+        <input type="hidden" name="ticket_id" value="{{ t.ticket_id }}">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

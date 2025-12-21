@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Bookings</h2>
+
+<div class="card">
+  <h3>Add Booking</h3>
+  <form method="post" action="/bookings/add">
+    <div>
+      <label>User</label><br>
+      <select name="user_id">
+        {% for u in users %}
+          <option value="{{ u.user_id }}">{{ u.username }} - {{ u.full_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Schedule</label><br>
+      <select name="schedule_id">
+        {% for s in schedules %}
+          <option value="{{ s.schedule_id }}">schedule {{ s.schedule_id }} | {{ s.flight_no }} | {{ s.depart_at }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Status</label><br>
+      <select name="status">
+        <option>PENDING</option><option>CONFIRMED</option><option>CANCELLED</option>
+      </select>
+    </div>
+
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+<table>
+  <tr>
+    <th>ID</th><th>Booking Ref</th><th>User</th><th>Flight</th><th>Depart</th><th>Status</th><th>Actions</th>
+  </tr>
+  {% for b in bookings %}
+  <tr>
+    <td>{{ b.booking_id }}</td>
+    <td>{{ b.booking_ref }}</td>
+    <td>{{ b.username }} ({{ b.full_name }})</td>
+    <td>{{ b.flight_no }}</td>
+    <td>{{ b.depart_at }}</td>
+    <td>{{ b.status }}</td>
+    <td>
+      <form class="inline" method="post" action="/bookings/update">
+        <input type="hidden" name="booking_id" value="{{ b.booking_id }}">
+        <select name="status">
+          <option {% if b.status=='PENDING' %}selected{% endif %}>PENDING</option>
+          <option {% if b.status=='CONFIRMED' %}selected{% endif %}>CONFIRMED</option>
+          <option {% if b.status=='CANCELLED' %}selected{% endif %}>CANCELLED</option>
+        </select>
+        <button type="submit">Update</button>
+      </form>
+
+      <form class="inline" method="post" action="/bookings/delete" onsubmit="return confirm('Delete booking?');">
+        <input type="hidden" name="booking_id" value="{{ b.booking_id }}">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

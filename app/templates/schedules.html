@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Flight Schedules</h2>
+
+<div class="card">
+  <h3>Add Schedule</h3>
+  <form method="post" action="/schedules/add">
+    <div>
+      <label>Flight</label><br>
+      <select name="flight_id">
+        {% for f in flights %}
+          <option value="{{ f.flight_id }}">{{ f.flight_no }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Aircraft</label><br>
+      <select name="aircraft_id">
+        {% for a in aircraft %}
+          <option value="{{ a.aircraft_id }}">{{ a.tail_number }} - {{ a.model }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div><label>Depart at</label><br><input type="datetime-local" name="depart_at"></div>
+    <div><label>Arrive at</label><br><input type="datetime-local" name="arrive_at"></div>
+
+    <div>
+      <label>Status</label><br>
+      <select name="status">
+        <option>SCHEDULED</option><option>DELAYED</option><option>CANCELLED</option><option>COMPLETED</option>
+      </select>
+    </div>
+
+    <div><label>Gate</label><br><input name="gate"></div>
+
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+<table>
+  <tr>
+    <th>ID</th><th>Flight</th><th>Aircraft</th><th>Depart</th><th>Arrive</th><th>Status</th><th>Gate</th><th>Actions</th>
+  </tr>
+  {% for s in schedules %}
+  <tr>
+    <td>{{ s.schedule_id }}</td>
+    <td>{{ s.flight_no }}</td>
+    <td>{{ s.aircraft_tail }} ({{ s.aircraft_model }})</td>
+    <td>{{ s.depart_at }}</td>
+    <td>{{ s.arrive_at }}</td>
+    <td>{{ s.status }}</td>
+    <td>{{ s.gate or "" }}</td>
+    <td>
+      <form class="inline" method="post" action="/schedules/update">
+        <input type="hidden" name="schedule_id" value="{{ s.schedule_id }}">
+        <select name="status">
+          <option {% if s.status=='SCHEDULED' %}selected{% endif %}>SCHEDULED</option>
+          <option {% if s.status=='DELAYED' %}selected{% endif %}>DELAYED</option>
+          <option {% if s.status=='CANCELLED' %}selected{% endif %}>CANCELLED</option>
+          <option {% if s.status=='COMPLETED' %}selected{% endif %}>COMPLETED</option>
+        </select>
+        <input name="gate" value="{{ s.gate or '' }}" style="width:70px;">
+        <button type="submit">Update</button>
+      </form>
+
+      <form class="inline" method="post" action="/schedules/delete" onsubmit="return confirm('Delete schedule?');">
+        <input type="hidden" name="schedule_id" value="{{ s.schedule_id }}">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

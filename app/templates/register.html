@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Register - Flight DBMS</title></head>
+<body style="font-family:Arial;margin:18px;">
+  <h2>Register</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div style="padding:10px;margin:10px 0;background:#ffe6e6;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="post" action="/register">
+    <div><label>Username*</label><br><input name="username" /></div>
+    <div><label>Email*</label><br><input name="email" /></div>
+    <div><label>Full name*</label><br><input name="full_name" /></div>
+    <div><label>Phone</label><br><input name="phone" /></div>
+    <div><label>Password*</label><br><input name="password" type="password" /></div>
+    <button type="submit">Create account</button>
+  </form>
+
+  <p><a href="/login">Back to login</a></p>
+</body>
+</html>
