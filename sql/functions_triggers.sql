@@ -104,3 +104,23 @@ create trigger confirm_booking_on_payment
 after insert on payments
 for each row
 execute function trg_confirm_booking_on_payment();
+
+create or replace procedure confirm_booking_procedure(p_booking_id bigint)
+language plpgsql
+as $$
+begin
+  update bookings
+  set status = 'CONFIRMED'
+  where booking_id = p_booking_id
+    and status <> 'CANCELLED';
+end;
+$$;
+create or replace procedure cancel_booking_procedure(p_booking_id bigint)
+language plpgsql
+as $$
+begin
+  update bookings
+  set status = 'CANCELLED'
+  where booking_id = p_booking_id;
+end;
+$$;
