@@ -124,3 +124,43 @@ begin
   where booking_id = p_booking_id;
 end;
 $$;
+
+create or replace function calculate_schedule_revenue(p_schedule_id bigint)
+returns numeric
+language plpgsql
+as $$
+declare
+  total_revenue numeric;
+begin
+  select coalesce(sum(t.ticket_price), 0)
+  into total_revenue
+  from tickets t
+  join bookings b on b.booking_id = t.booking_id
+  where b.schedule_id = p_schedule_id;
+
+  return total_revenue;
+end;
+$$;
+
+create or replace function prevent_duplicate_seat()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_schedule_id bigint;
+begin
+  select schedule_id into v_schedule_id
+  from bookings
+  where booking_id = new.booking_id;
+if exists (
+    select 1
+    from tickets t
+    join bookings b on b.booking_id = t.booking_id
+    where b.schedule_id = v_schedule_id
+      and upper(t.seat_no) = upper(new.seat_no)
+  ) then
+    raise exception 'Seat % is already booked for this schedule', new.seat_no;
+  end if;
+  new.seat_no := upper(new.seat_no);
+  return new;
+end; $$;
