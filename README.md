@@ -192,8 +192,8 @@ CMPE-344-Project-FightDBMS/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Abdulraheem-Bawazir/CMPE-344-Project-FightDBMS.git
-cd CMPE-344-Project-FightDBMS
+git clone https://github.com/Abdulraheem-Bawazir/CMPE-344-Project-FlightDBMS.git
+cd CMPE-344-Project-FlightDBMS
 ```
 
 ### 2. Create `app/.env`
