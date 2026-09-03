@@ -1,0 +1,16 @@
+GitHub description:
+Flight management DBMS built with PostgreSQL/Supabase and Flask, featuring relational schema design, CRUD workflows, SQL analytics, PL/pgSQL procedures, functions, and integrity triggers.
+
+Suggested topics:
+postgresql
+supabase
+flask
+python
+sql
+plpgsql
+database
+dbms
+relational-database
+crud
+database-design
+flight-management
